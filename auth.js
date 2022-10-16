@@ -19,7 +19,7 @@ export const signIn = (model) => (req, res) => {
   try {
     const user = model.findOne({ email: req.body.email });
     if (!user) {
-      throw new Error("User does not exist");
+      throw new Error("User does not exist in the database");
     }
 
     // const match = user.checkPassword(req.body.password);
