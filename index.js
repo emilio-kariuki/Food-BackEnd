@@ -7,6 +7,7 @@ import {connect} from './db.js'
 import userRouter from './User/user.router.js'
 const {urlencoded, json }= pkg
 import { login,register } from './User/user.auth.js';
+import restrauntRouter from './Restraunt/restraunt.router.js'
 
 //the default express app
 export const app = express();
@@ -29,6 +30,7 @@ app.all('/', (req,res)=>{
 
 app.use('/user', userRouter)
 app.post('/user/login', login )
+app.use('/restraunt', restrauntRouter)
 
 
 export const start = async()=>{

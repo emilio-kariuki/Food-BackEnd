@@ -4,7 +4,7 @@ export const getOne = (model) => async (req, res) => {
     const doc = await model.findById({ _id: req.params.id }).exec();
 
     if (!doc) {
-      throw new Error("Item has not been fetched");
+      throw new Error("Item cannot be found");
     }
 
     res.status(200).send({ data: doc });
@@ -44,14 +44,16 @@ export const createOne = (model) => async(req,res)=>{
 
 export const updateOne = (model) => (req, res) => {
   try {
-    const update = model.findOneAndUpdate({ _id: req.params.id }).exec();
+    const update = model.findOneAndUpdate({ _id: req.params.id },req.body).exec();
 
     if (!update) {
+      
       throw new Error("Item has not been updated");
     }
 
     res.status(200).send({ message: "Item has been updated successfully" });
   } catch (e) {
+
     res.status(500).send({ message: e.message });
   }
 };

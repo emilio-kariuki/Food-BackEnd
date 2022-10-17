@@ -1,6 +1,6 @@
-import { mongoose } from 'mongoose';
-import uuid from 'node-uuid';
-import bcrypt from 'bcrypt';
+import { mongoose } from "mongoose";
+import uuid from "node-uuid";
+import bcrypt from "bcrypt";
 
 //components of the user Schema
 /*
@@ -66,30 +66,30 @@ const userSchema = new mongoose.Schema({
   },
 });
 
-userSchema.pre('save', function(next) {
-    if (!this.isModified('password')) {
-      return next()
+userSchema.pre("save", function (next) {
+  if (!this.isModified("password")) {
+    return next();
+  }
+
+  bcrypt.hash(this.password, 8, (err, hash) => {
+    if (err) {
+      return next(err);
     }
 
-    bcrypt.hash(this.password, 8, (err, hash) => {
+    this.password = hash;
+    next();
+  });
+});
+
+userSchema.methods.checkPassword = (password) => {
+  return new Promise((reject, resolve) => {
+    bcrypt.compare(password, this.password, (err, same) => {
       if (err) {
-        return next(err)
+        reject(err);
       }
+      resolve(same);
+    });
+  });
+};
 
-      this.password = hash
-      next()
-    })
-  })
-
-userSchema.methods.checkPassword = (password)=>{
-    return new Promise((reject, resolve)=>{
-        bcrypt.compare(password, this.password, (err, same)=>{
-            if(err){
-                reject(err)
-            }
-            resolve(same)
-        })
-    })
-}
-
-export const User = new mongoose.model('users', userSchema)
+export const User = new mongoose.model("users", userSchema);
