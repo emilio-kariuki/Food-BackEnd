@@ -3,11 +3,14 @@ import express from 'express'
 import cors from 'cors'
 import morgan from 'morgan'
 import pkg from 'body-parser';
-import {connect} from './db.js'
+import {connect} from './Middleware/db.js'
 import userRouter from './User/user.router.js'
 const {urlencoded, json }= pkg
-import { login,register } from './User/user.auth.js';
+import {User} from './User/user.model.js'
+
 import restrauntRouter from './Restraunt/restraunt.router.js'
+import { signIn, signUp, protect} from './Middleware/auth.js';
+
 
 //the default express app
 export const app = express();
@@ -26,10 +29,16 @@ app.all('/', (req,res)=>{
 })
 
 
+
+
 //middleware for the apps routes
+app.use('/restraunt', protect)
+
+app.post('/login', signIn)
+app.post('/register', signUp)
 
 app.use('/user', userRouter)
-app.post('/user/login', login )
+
 app.use('/restraunt', restrauntRouter)
 
 

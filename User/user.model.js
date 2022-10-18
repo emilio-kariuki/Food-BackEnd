@@ -1,6 +1,6 @@
-import { mongoose } from "mongoose";
-import uuid from "node-uuid";
-import bcrypt from "bcrypt";
+import { mongoose } from 'mongoose';
+import uuid from 'node-uuid';
+import bcrypt from 'bcrypt';
 
 //components of the user Schema
 /*
@@ -76,14 +76,17 @@ userSchema.pre("save", function (next) {
       return next(err);
     }
 
+
     this.password = hash;
     next();
   });
 });
 
-userSchema.methods.checkPassword = (password) => {
+
+userSchema.methods.checkPassword = function(password){
+  const passwordHash = this.password;
   return new Promise((reject, resolve) => {
-    bcrypt.compare(password, this.password, (err, same) => {
+    bcrypt.compare(password, passwordHash, (err, same) => {
       if (err) {
         reject(err);
       }
